@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="1-Create-tables" author="Anastasiya Sashina">
+        <sqlFile path="changeset/init/create-faculty-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-institute-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-administrative_employee-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-research_associate-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-course-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-project-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-institute_employees-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-lectures-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-project_participation-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-role-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-user_info-table.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="changeset/init/create-user_role-table.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5434}/${DATABASE_NAME:university}
+    username: ${DATABASE_USERNAME:postgres}
+    password: ${DATABASE_PASSWORD:password}
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.xml
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    url: /openapi.yaml
+    path: /swagger-ui.html
+
+server:
+  shutdown: GRACEFUL
+  forward-headers-strategy: NATIVE
+
+security:
+  jwt:
+    secretKey: oohSoS3cr3tk3y0w0
+    expiresMs:
+      accessToken: 1 800 000

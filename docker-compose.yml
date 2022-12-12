@@ -1,0 +1,28 @@
+version: "3.2"
+services:
+  backend:
+    image: university_backend
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - universitydb
+    environment:
+      - DATABASE_HOST=${DOCKER_IP}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_NAME=${DATABASE_NAME}
+
+  universitydb:
+    image: postgres:14-alpine
+    ports:
+      - ${DATABASE_PORT}:5432
+    container_name: ${DATABASE_HOST}
+    environment:
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data

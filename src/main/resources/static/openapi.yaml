@@ -1,0 +1,964 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: localhost
+    url: http://localhost:8080
+info:
+  version: "1.0.0"
+  title: University System API
+  description: Project made for VSU
+  contact:
+    name: Anastasiya Sashina
+    email: yaninastya2010@yandex.ru
+
+paths:
+
+  # ----------------------------------------------------------------------
+  #                                 faculty
+  # ----------------------------------------------------------------------
+
+  /faculty/:
+    get:
+      tags:
+        - Faculty
+      description: Returns all faculties
+      responses:
+        200:
+          description: Returns all faculties
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculties'
+    post:
+      tags:
+        - Faculty
+      description: Creates faculty
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyRequest'
+      responses:
+        201:
+          description: Faculty was successfully created
+        400:
+          description: Invalid request body
+
+  /faculty/{id}:
+    get:
+      tags:
+        - Faculty
+      description: Gets faculty's info by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: Faculty was successfully fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+        400:
+          description: Invalid id type
+        404:
+          description: Faculty with following id does not exist
+    delete:
+      tags:
+        - Faculty
+      description: Deletes faculty by id
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Faculty was successfully deleted
+        400:
+          description: Invalid id type
+        404:
+          description: Movie with following id does not exist
+    put:
+      tags:
+        - Faculty
+      description: Updates faculty by id
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyRequest'
+      responses:
+        200:
+          description: Faculty was successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Faculty'
+        400:
+          description: Invalid input
+        404:
+          description: Movie with following id does not exist
+
+  /faculty/{id}/institutes:
+    get:
+      tags:
+        - Faculty
+      description: Gets faculty's institutes by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: Faculty's institutes were successfully fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institutes'
+        400:
+          description: Invalid id type
+        404:
+          description: Movie with following id does not exist
+    
+  /faculty/{id}/dean/{researcherId}:
+    post:
+      tags:
+        - Faculty
+      security:
+        - bearerAuth: []
+      description: Enroll dean to faculty
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: path
+          name: researcherId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: Dean was successfuly enrolled
+        400:
+          description: Invalid ids type
+        404:
+          description: Faculty or researcher does not exist
+
+  # ----------------------------------------------------------------------
+  #                                 institute
+  # ----------------------------------------------------------------------
+
+  /institute/:
+    post:
+      tags:
+        - Institute
+      description: Creates institute
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstituteRequest'
+      responses:
+        201:
+          description: institute was successfully created
+        400:
+          description: Invalid request body
+        403:
+          description: Access denied
+        404:
+          description: Faculty does not exist
+
+  /institute/{id}:
+    get:
+      tags:
+        - Institute
+      description: Gets institute info by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: institute was successfully fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Institute'
+        400:
+          description: Invalid id type
+        404:
+          description: Institute with following id does not exist
+    put:
+      tags:
+        - Institute
+      description: Updates institute
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstituteRequest'
+      responses:
+        200:
+          description: Institute was successfuly updated
+        400:
+          description: Invalid input data
+        403:
+          description: Access denied
+        404:
+          description: Institute does not exist
+        409:
+          description: Attempt to change faculty
+    delete:
+      tags:
+        - Institute
+      description: Deletes institute
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Institute was successfuly deleted
+        400:
+          description: Invalid id
+        403:
+          description: Access denied
+        404:
+          description: Institute does not exist
+
+  /institute/{id}/researches:
+    get:
+      tags:
+        - Institute
+      description: Gets institute's researches
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: Institute's researches was successfully fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Researchers'
+        400:
+          description: Invalid id type
+        404:
+          description: Institute with following id does not exist
+
+  # ----------------------------------------------------------------------
+  #                                 employee
+  # ----------------------------------------------------------------------
+
+  /employee/administrative:
+    post:
+      tags:
+        - Employee
+      description: Creates administrative employee
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeRequest'
+      responses:
+        201:
+          description: Administrative employee was successfully created
+        400:
+          description: Invalid request body
+
+  /employee/administrative/{id}:
+    delete:
+      tags:
+        - Employee
+      description: Deletes administrative employee by id
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Administrative employee was successfully deleted
+        400:
+          description: Invalid id type
+        404:
+          description: Administrative employee with following id does not exist
+          
+  /employee/research:
+    post:
+      tags:
+        - Employee
+      description: Creates research associate
+      security:
+        - bearerAuth: [ ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeRequest'
+      responses:
+        201:
+          description: Research associate was successfully created
+        400:
+          description: Invalid request body
+
+  /employee/research/{id}:
+    delete:
+      tags:
+        - Employee
+      description: Deletes research associate by id
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Research associate was successfully deleted
+        400:
+          description: Invalid id type
+        404:
+          description: Research associate with following id does not exist
+
+  # ----------------------------------------------------------------------
+  #                                 user
+  # ----------------------------------------------------------------------
+
+  /user/register:
+    post:
+      tags:
+        - User
+      description: Signs up new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpForm'
+      responses:
+        201:
+          description: User successfuly created, returns acess token
+        400:
+          description: Invalid request body
+        409:
+          description: User alredy exists or passwords do not match
+
+  /user/login:
+    post:
+      tags:
+        - User
+      description: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+      responses:
+        200:
+          description: User successfuly logged in, returns access token
+        400:
+          description: Invalid request body
+        409:
+          description: Wrong password
+
+  # ----------------------------------------------------------------------
+  #                                 project
+  # ----------------------------------------------------------------------
+
+  /project:
+    get:
+      tags:
+        - Project
+      description: Fetches all projects
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Projects were successfuly fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Projects'
+    post:
+      tags:
+        - Project
+      description: Creates project
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectRequest'
+      responses:
+        201:
+          description: Project was created
+        400:
+          description: Invalid input
+
+  /project/{id}:
+    get:
+      tags:
+        - Project
+      description: Shows project's details
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: Returns project's details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        400:
+          description: Invalid input
+        403:
+          description: Access denied
+        404:
+          description: Project with following id does not exist
+    delete:
+      tags:
+        - Project
+      description: Deletes project
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Project was successfully deleted
+        400:
+          description: Invalid input
+        404:
+          description: Project with following id does not exist
+
+  /project/{id}/enroll:
+    post:
+      tags:
+        - Project
+      description: Enrolls reseracher to project
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParticipationRequest'
+      responses:
+        200:
+          description: Researhcer was successfuly enrolled
+        400:
+          description: Invalid input
+        404:
+          description: Project/Reseacher with following id does not exist
+        409:
+          description: Researcher already participates in this project
+
+  /project/{id}/unsubscribe/{participantId}:
+    delete:
+      tags:
+        - Project
+      description: Unsubscribe researcher
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: path
+          name: participantId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Participant was successfily unsubscribed
+        400:
+          description: Invalid input
+        404:
+          description: Project with following researcher does not exist
+
+  # ----------------------------------------------------------------------
+  #                                 course
+  # ----------------------------------------------------------------------
+
+  /course:
+    get:
+      tags:
+        - Course
+      description: Fetches all courses
+      responses:
+        200:
+          description: Courses were successfuly fetched
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Courses'
+    post:
+      tags:
+        - Course
+      description: Creates course
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseRequest'
+      responses:
+        201:
+          description: Course was created
+        400:
+          description: Invalid input
+
+  /course/{id}:
+    get:
+      tags:
+        - Course
+      description: Shows course's details
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: Returns course's details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        400:
+          description: Invalid input
+        404:
+          description: Course with following id does not exist
+    delete:
+      tags:
+        - Course
+      description: Deletes course
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Course was successfully deleted
+        400:
+          description: Invalid input
+        404:
+          description: Course with following id does not exist
+    put:
+      tags:
+        - Course
+      description: Updated course
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseRequest'
+      responses:
+        200:
+          description: Course was successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        400:
+          description: Invalid input
+        403:
+          description: Access denied
+        404:
+          description: Course does not exist
+
+  /course/{id}/enroll/{lecturerId}:
+    post:
+      tags:
+        - Course
+      description: Enrolls lecturer to course
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: path
+          name: lecturerId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: Lecturer was successfuly enrolled
+        400:
+          description: Invalid input
+        404:
+          description: Course/Lecturer with following id does not exist
+        409:
+          description: Lecturer already enrolled in this course
+
+  /course/{id}/unsubscribe/{lecturerId}:
+    delete:
+      tags:
+        - Course
+      description: Unsubscribe lecturer
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: path
+          name: lecturerId
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        204:
+          description: Lecturer was successfily unsubscribed
+        400:
+          description: Invalid input
+        404:
+          description: Course with following lecturer does not exist
+
+# ----------------------------------------------------------------------
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Faculties:
+      type: array
+      items:
+        $ref: '#/components/schemas/Faculty'
+        
+    Faculty:
+      type: object
+      properties: 
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        deanSocialSecurityNumber:
+          type: integer
+          format: int64
+    
+    FacultyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+        deanSocialSecurityNumber:
+          type: integer
+          format: int64
+          
+    Institutes:
+      type: array
+      items:
+        $ref: '#/components/schemas/Institute'
+    
+    Institute:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        facculty:
+          $ref: '#/components/schemas/Faculty'
+
+    InstituteRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+          maxLength: 100
+        address:
+          type: string
+          nullable: false
+        facutyId:
+          type: integer
+          format: int64
+          nullable: false
+
+    Researchers:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResearchAssociate'
+
+    ResearchAssociate:
+      type: object
+      properties:
+        socialSecurityNumber:
+          type: integer
+          format: int64
+        name:
+          type: string
+        email:
+          type: string
+        fieldOfStudy:
+          type: string
+        institutes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Institute'
+
+    EmployeeRequest:
+      type: object
+      properties:
+        socialSecurityNumber:
+          type: integer
+          format: int64
+          nullable: false
+        name:
+          type: string
+          nullable: false
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          nullable: false
+          maxLength: 255
+        fieldOfStudy:
+          type: string
+
+    Projects:
+      type: array
+      items:
+        $ref: '#/components/schemas/Project'
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        startingDate:
+          type: string
+          format: date-time
+          example: "dd.MM.yyyy HH:mm"
+        endDate:
+          type: string
+          format: date-time
+          example: "dd.MM.yyyy HH:mm"
+
+    ProjectRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+          maxLength: 100
+        startDate:
+          type: string
+          format: date
+          example: "dd.MM.yyyy"
+          nullable: false
+        startTime:
+          type: string
+          format: time
+          example: "HH:mm"
+          nullable: false
+        endDate:
+          type: string
+          format: date
+          example: "dd.MM.yyyy"
+          nullable: false
+        endTime:
+          type: string
+          format: time
+          example: "HH:mm"
+          nullable: false
+
+    ParticipationRequest:
+      type: object
+      properties:
+        participantSecuritySocialNumber:
+          type: integer
+          format: int64
+          nullable: false
+        hours:
+          type: integer
+          nullable: false
+
+    Courses:
+      type: array
+      items:
+        $ref: '#/components/schemas/Course'
+
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        weeklyDuration:
+          type: number
+        lecturers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResearchAssociate'
+
+    CourseRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: false
+          maxLength: 255
+        weeklyDuration:
+          type: number
+          nullable: false
+
+    SignUpForm:
+      type: object
+      properties:
+        securitySocialNumber:
+          type: integer
+          format: int64
+          nullable: false
+        password:
+          type: string
+          format: password
+          nullable: false
+          minLength: 8
+          maxLength: 10
+        repeatPassword:
+          type: string
+          format: password
+          nullable: false
+          minLength: 8
+          maxLength: 10
+
+    LoginForm:
+      type: object
+      properties:
+        securitySocialNumber:
+          type: integer
+          format: int64
+          nullable: false
+        password:
+          type: string
+          format: password
+          nullable: false
+          minLength: 8
+          maxLength: 10
